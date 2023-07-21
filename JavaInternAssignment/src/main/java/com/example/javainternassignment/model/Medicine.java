@@ -18,7 +18,7 @@ public class Medicine {
     @Id
     @GeneratedValue
     private long id;
-    private String name;
+    private String medName;
     private String description;
     private double price;
     private int quantity;

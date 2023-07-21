@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/meds")
+@CrossOrigin
 public class MedicineController {
 
     @Autowired
@@ -30,8 +31,8 @@ public class MedicineController {
         return medicineService.medicineByID(id);
     }
 
-    @PutMapping("/update")
-    public Medicine updateMeds(@RequestBody Medicine medicine){
+    @PutMapping("/update/{id}")
+    public Medicine updateMeds(@PathVariable long id, @RequestBody Medicine medicine){
         return medicineService.updateMedicines(medicine);
 
     }

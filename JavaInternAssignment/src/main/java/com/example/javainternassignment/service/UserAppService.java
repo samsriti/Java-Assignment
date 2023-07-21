@@ -1,6 +1,7 @@
 package com.example.javainternassignment.service;
 
 import com.example.javainternassignment.DTO.LoginDTO;
+import com.example.javainternassignment.DTO.PasswordDTO;
 import com.example.javainternassignment.model.UserApp;
 import com.example.javainternassignment.repository.UserAppRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,5 +51,24 @@ public class UserAppService {
            return "failed";
        }
     }
+
+    public String changePassword(PasswordDTO passwordDTO){
+            UserApp userApp1 = userAppRepo.findByEmail(passwordDTO.getEmail());
+            if(userApp1!=null) {
+                BCryptPasswordEncoder bCryptPasswordEncoder1 = new BCryptPasswordEncoder();
+                if ((passwordDTO.getPassword().equals(passwordDTO.getConfirmPassword()))) {
+                    userApp1.setPassword(bCryptPasswordEncoder1.encode(passwordDTO.getConfirmPassword()));
+                    userAppRepo.save(userApp1);
+                    return "success";
+                }else {
+                    return "mismatch";
+                }
+            }else {
+                return "failed";
+            }
+
+    }
+
+
 
 }

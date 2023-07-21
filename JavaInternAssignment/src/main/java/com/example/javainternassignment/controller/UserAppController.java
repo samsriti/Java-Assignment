@@ -1,7 +1,9 @@
 package com.example.javainternassignment.controller;
 
 import com.example.javainternassignment.DTO.LoginDTO;
+import com.example.javainternassignment.DTO.PasswordDTO;
 import com.example.javainternassignment.model.UserApp;
+import com.example.javainternassignment.repository.UserAppRepo;
 import com.example.javainternassignment.service.UserAppService;
 import com.example.javainternassignment.util.ResponseHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +13,13 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
+@CrossOrigin
 public class UserAppController {
 
     @Autowired
     private  UserAppService userAppService;
+
+    private UserAppRepo userAppRepo;
 
     @Autowired
     private ResponseHandler responseHandler;
@@ -85,5 +90,27 @@ public class UserAppController {
     @GetMapping("/logout")
     public UserApp logout(){
         return null;
+    }
+
+    @PostMapping("/changePassword")
+    public ResponseEntity<Object> changePassword(@RequestBody PasswordDTO passwordDTO){
+           String change = userAppService.changePassword(passwordDTO);
+           switch (change) {
+               case "success":
+                   return responseHandler.generateResponse(
+                           HttpStatus.OK, true,
+                           "Password Changed Successfully",
+                           null);
+               case "failed":
+                   return responseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Invalid email address", null);
+               case "mismatch":
+                   return responseHandler.generateResponse(HttpStatus.BAD_REQUEST, true, "Password does not match", null);
+
+               default:
+                   return responseHandler.generateResponse(HttpStatus.OK, true, "Something went wrong", null);
+
+
+       }
+
     }
 }

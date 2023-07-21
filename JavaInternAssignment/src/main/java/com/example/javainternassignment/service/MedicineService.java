@@ -26,7 +26,7 @@ public class MedicineService {
 
     public Medicine updateMedicines(Medicine medicine){
         Medicine medicine1 = medicineRepo.findById(medicine.getId()).orElse(null);
-        medicine.setName(medicine.getName());
+        medicine.setMedName(medicine.getMedName());
         medicine.setDescription(medicine.getDescription());
         medicine.setQuantity(medicine.getQuantity());
         medicine.setExpiryDate(medicine.getExpiryDate());
