@@ -3,7 +3,7 @@ import { TextField, Button, Box, Typography, Container } from '@mui/material';
 import NavBar from './NavBar';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import {Link, useNavigate, useParams} from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 const initialState = {
     medName: '',
@@ -17,7 +17,7 @@ const InventoryForm = () => {
 
     const { medName, description, quantity, price, expiryDate } = formData;
 
-    const {id} = useParams();
+    const { id } = useParams();
     const navigate = useNavigate();
 
     const handleInputChange = (e) => {
@@ -28,47 +28,37 @@ const InventoryForm = () => {
         }));
     };
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         if (id) {
             axios.get(`http://localhost:8081/meds/getByID/${id}`)
-              .then((response) => {
-                setFormData({ ...response.data[0] });
-                console.log(response.data);
-              })
-              .catch((error) => {
-               
-                console.error(error);
-              });
-          }
+                .then((response) => {
+                    const { expiryDate, ...formData } = response.data;
+                    const dateObject = new Date(expiryDate);
+                    setFormData({
+                        ...formData,
+                        expiryDate: dateObject.toISOString().split('T')[0],
+                    });
+                    console.log(response.data);
+                    console.log(formData);
+                })
+                .catch((error) => {
+
+                    console.error(error);
+                });
+        }
 
     }, [])
-    
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        if(!id){
-        axios.post("http://localhost:8081/meds/saveMed", {
-            medName,
-            description,
-            quantity,
-            price,
-            expiryDate,
-        }).then(() => {
-            setFormData({
-                medName: "",
-                description: "",
-                quantity: "",
-                price: "",
-                expiryDate: "",
-            })
-            toast.success("Medicine added to the inventory!")
-        })}else{
-            axios.put(`http://localhost:8081/meds/update/${id}`,{
+        if (!id) {
+            axios.post("http://localhost:8081/meds/saveMed", {
                 medName,
-            description,
-            quantity,
-            price,
-            expiryDate,
-            }).then(()=>{
+                description,
+                quantity,
+                price,
+                expiryDate,
+            }).then(() => {
                 setFormData({
                     medName: "",
                     description: "",
@@ -76,13 +66,31 @@ const InventoryForm = () => {
                     price: "",
                     expiryDate: "",
                 })
-                toast.success("Medicine updated successfully!")
-            }).catch((e)=>{
+                toast.success("Medicine added to the inventory!")
+            })
+        } else {
+            axios.put(`http://localhost:8081/meds/update/${id}`, {
+                id, 
+                medName,
+                description,
+                quantity,
+                price,
+                expiryDate,
+            }).then(() => {
+                setFormData({
+                    medName: "",
+                    description: "",
+                    quantity: "",
+                    price: "",
+                    expiryDate: "",
+                })
+                toast.success("Inventory Updated")
+            }).catch((e) => {
                 toast.error(e.response.data)
             })
         }
-        setTimeout(()=>{
-            toast.success("Inventory Updated")
+        setTimeout(() => {
+            
             navigate("/getAll")
         }, 500)
         console.log('Submitted data:', formData);
@@ -113,7 +121,7 @@ const InventoryForm = () => {
                             fullWidth
                             label="Medicine Name"
                             name="medName"
-                            value={formData.medName ||""}
+                            value={formData.medName || ""}
                             onChange={handleInputChange}
                             margin="normal"
                             variant="outlined"
@@ -123,7 +131,7 @@ const InventoryForm = () => {
                             fullWidth
                             label="Description"
                             name="description"
-                            value={formData.description||""}
+                            value={formData.description || ""}
                             onChange={handleInputChange}
                             margin="normal"
                             variant="outlined"
@@ -134,7 +142,7 @@ const InventoryForm = () => {
                             label="Quantity"
                             type="number"
                             name="quantity"
-                            value={formData.quantity||""}
+                            value={formData.quantity || ""}
                             onChange={handleInputChange}
                             margin="normal"
                             variant="outlined"
@@ -145,7 +153,7 @@ const InventoryForm = () => {
                             label="Price"
                             type="number"
                             name="price"
-                            value={formData.price||""}
+                            value={formData.price || ""}
                             onChange={handleInputChange}
                             margin="normal"
                             variant="outlined"
@@ -156,7 +164,7 @@ const InventoryForm = () => {
                             label="Expiry Date"
                             type="date"
                             name="expiryDate"
-                            value={formData.expiryDate||""}
+                            value={formData.expiryDate || ""}
                             onChange={handleInputChange}
                             margin="normal"
                             variant="outlined"
@@ -165,8 +173,8 @@ const InventoryForm = () => {
                                 shrink: true,
                             }}
                         />
-                        <Button  variant="contained" color="primary" type="submit" size="large" sx={{ mt: 3 }} >
-                        {id?  'Update' : 'Save' }
+                        <Button variant="contained" color="primary" type="submit" size="large" sx={{ mt: 3 }} >
+                            {id ? 'Update' : 'Save'}
                         </Button>
                     </form>
                 </Box>

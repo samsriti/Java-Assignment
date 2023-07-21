@@ -1,18 +1,17 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function NavBar() {
 
+    const navigate = useNavigate();
+
     const handleLogout = ()=>{
         if(window.confirm("Are you sure you want to logout?")){
-            <Link to={"/"}>
-            </Link>
-        }else{
-            <Link to={"/getAll"}>
-            </Link>
-
-        }
+            setTimeout(() => {
+                navigate("/")
+            }, 0)
+               }
     }
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -53,7 +52,7 @@ export default function NavBar() {
         </div>
       </div>
       <div> 
-        <Link to={"/"}> 
+        <Link> 
         <button class="btn btn-outline-dark" onClick={handleLogout} style={{marginRight: 15}}>Logout</button>
         </Link>
       </div>

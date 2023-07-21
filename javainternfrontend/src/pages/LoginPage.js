@@ -32,16 +32,19 @@ const LoginPage = () => {
     axios.post("http://localhost:8081/user/login", {
       email,
       password
-    }).then(() => {
-      setFormData({
-        email: "",
-        password: ""
-      })
+    }).then((response) => {
+      if(response.data.isSuccess){
+        setTimeout(() => {
+          toast.success("Logged in successfully")
+          navigate("/getAll");
+        }, 500)
+      }else{
+        toast.error(response.data.message)
+      }
+      
     })
-    setTimeout(() => {
-      toast.success("Logged in successfully")
-      navigate("/getAll");
-    }, 500)
+
+    
     console.log('Submitted data:', formData);
   };
 

@@ -59,7 +59,7 @@ const Registration = () => {
 
     return (
         <>
-            <NavBar />
+            
             <Container maxWidth="sm">
                 <Box
                     sx={{

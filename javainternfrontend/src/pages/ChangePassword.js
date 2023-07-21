@@ -26,14 +26,21 @@ const ChangePassword = () => {
         email,
         password,
         confirmPassword
-    }).then(()=>{
+        
+    }).then((response)=>{
         setFormData({
             email: '',
             password: '',
             confirmPassword: '',
         })
+        if(response.data.isSuccess){
+            toast.success("Password changed successfully")
+        }
+    }).catch((error)=>{
+        toast.error(error.response.data.message)
     })
-    toast.success("Password changed successfully")
+   
+
     console.log('Submitted data:', formData);
   };
 

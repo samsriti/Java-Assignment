@@ -59,7 +59,7 @@ const InventoryTable = () => {
                                 <TableCell>{item.medName}</TableCell>
                                 <TableCell>{item.quantity}</TableCell>
                                 <TableCell>{item.price}</TableCell>
-                                <TableCell>{item.expiryDate}</TableCell>
+                                <TableCell>{item.expiryDate.split('T')[0]}</TableCell>
                                 <TableCell>
                                     <Link to={`/getByID/${item.id}`}>
                                         <IconButton color="primary">
@@ -71,7 +71,7 @@ const InventoryTable = () => {
                                         <Edit />
                                     </IconButton>
                                     </Link>
-                                    <Link to={`/delete/${item.id}`}>
+                                    <Link>
                                         <IconButton color="error" onClick={() => handleDelete(item.id)} >
                                             <Delete />
                                         </IconButton>

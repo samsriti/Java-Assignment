@@ -72,10 +72,11 @@ public class UserAppController {
 
             );
             case "failed":
+            case "no user":
                 return responseHandler.generateResponse(
                     HttpStatus.OK,
                     false,
-                    "Login failed",
+                    "Invalid credentials",
                     null
             );
             default:
